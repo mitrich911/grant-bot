@@ -1,0 +1,1 @@
+from charset_normalizer import from_path p = "parsers.py" res = from_path(p).best() if not res:    raise SystemExit("Не удалось определить кодировку") print("Detected:", res.encoding) open(p, "w", encoding="utf-8").write(str(res))

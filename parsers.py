@@ -2,7 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 import feedparser
 
-# ---------- 1. Росмолодёжь.Гранты (API JSON) ----------
+# ---------- 1. Р РѕСЃРјРѕР»РѕРґС‘Р¶СЊ.Р“СЂР°РЅС‚С‹ (API JSON) ----------
 def get_rosmolodezh(limit=10):
     url = f"https://grants.myrosmol.ru/api/v3/contests?limit={limit}&offset=0"
     resp = requests.get(url)
@@ -14,12 +14,12 @@ def get_rosmolodezh(limit=10):
             "link": f"https://grants.myrosmol.ru/contests/{item['id']}",
             "deadline": f"{item['date_end_accepting_applications'][:10]}",
             "summary": item.get("description", "")[:200] + "...",
-            "source": "Росмолодёжь.Гранты"
+            "source": "Р РѕСЃРјРѕР»РѕРґС‘Р¶СЊ.Р“СЂР°РЅС‚С‹"
         })
     return announcements
 
 
-# ---------- 2. ФАСИЭ (новости/конкурсы) ----------
+# ---------- 2. Р¤РђРЎРР­ (РЅРѕРІРѕСЃС‚Рё/РєРѕРЅРєСѓСЂСЃС‹) ----------
 def get_fasie_news():
     url = "https://fasie.ru/press/fund-news/"
     resp = requests.get(url)
@@ -34,12 +34,12 @@ def get_fasie_news():
             "link": link,
             "deadline": None,
             "summary": "",
-            "source": "ФАСИЭ"
+            "source": "Р¤РђРЎРР­"
         })
     return announcements
 
 
-# ---------- 3. Сколково (новости) ----------
+# ---------- 3. РЎРєРѕР»РєРѕРІРѕ (РЅРѕРІРѕСЃС‚Рё) ----------
 def get_skolkovo():
     url = "https://sk.ru/news/"
     resp = requests.get(url)
@@ -54,7 +54,7 @@ def get_skolkovo():
             "link": link,
             "summary": "",
             "deadline": None,
-            "source": "Сколково"
+            "source": "РЎРєРѕР»РєРѕРІРѕ"
         })
     return announcements
 
@@ -79,9 +79,9 @@ def get_generations():
     return announcements
 
 
-# ---------- 5. Президентские гранты ----------
+# ---------- 5. РџСЂРµР·РёРґРµРЅС‚СЃРєРёРµ РіСЂР°РЅС‚С‹ ----------
 def get_president_grants():
-    url = "https://президентскиегранты.рф/public/application/open"
+    url = "https://РїСЂРµР·РёРґРµРЅС‚СЃРєРёРµРіСЂР°РЅС‚С‹.СЂС„/public/application/open"
     resp = requests.get(url)
     soup = BeautifulSoup(resp.text, "html.parser")
     contests = soup.select(".contest-page__list-item")
@@ -89,19 +89,19 @@ def get_president_grants():
     for contest in contests:
         title = contest.select_one(".contest-page__list-item-title").get_text(strip=True)
         link_tag = contest.select_one("a")
-        link = "https://президентскиегранты.рф" + link_tag["href"] if link_tag else url
+        link = "https://РїСЂРµР·РёРґРµРЅС‚СЃРєРёРµРіСЂР°РЅС‚С‹.СЂС„" + link_tag["href"] if link_tag else url
         deadline = contest.select_one(".contest-page__list-item-date")
         announcements.append({
             "title": title,
             "link": link,
             "deadline": deadline.get_text(strip=True) if deadline else None,
             "summary": "",
-            "source": "Фонд президентских грантов"
+            "source": "Р¤РѕРЅРґ РїСЂРµР·РёРґРµРЅС‚СЃРєРёС… РіСЂР°РЅС‚РѕРІ"
         })
     return announcements
 
 
-# ---------- 6. Московский "Мой бизнес" ----------
+# ---------- 6. РњРѕСЃРєРѕРІСЃРєРёР№ "РњРѕР№ Р±РёР·РЅРµСЃ" ----------
 def get_moscow_mbm():
     url = "https://mbm.mos.ru/novosti/"
     resp = requests.get(url)
@@ -116,6 +116,6 @@ def get_moscow_mbm():
             "link": link,
             "summary": card.select_one(".b-news__descr").get_text(strip=True) if card.select_one(".b-news__descr") else "",
             "deadline": None,
-            "source": "МБМ Москва"
+            "source": "РњР‘Рњ РњРѕСЃРєРІР°"
         })
     return announcements

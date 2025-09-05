@@ -1,0 +1,9 @@
+version: "3.9"
+services:
+  grantbot:
+    build: .
+    container_name: grantbot
+    restart: always
+    environment:
+      - TELEGRAM_TOKEN=${TELEGRAM_TOKEN}
+      - CHANNEL_ID=${CHANNEL_ID}
